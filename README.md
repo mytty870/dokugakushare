@@ -1,1 +1,1 @@
-# help_selfeducation
+練習です
