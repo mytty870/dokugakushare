@@ -1,0 +1,21 @@
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+  background-color: #f7c600;
+}
+
+.navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
+  color: white;
+}
+
+.nav-right{
+  margin-left: 20px;
+}
+
+ul.navbar-nav a:hover { color: rgba(250, 230, 119, 0.781) !important; }
+
+.nav-two{
+  margin-right: 360px;
+}
+
+.bg-light {
+  background-color: white;
+}
