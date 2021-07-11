@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form class="form-box" id="form1" action="{% url 'user:search_detail' %}" method="GET">
+
+<section class="site_filter">
+        <div class="container-fluid">
+            <div class="col-sm-3 col-3">
+                    <div class="form-group">
+                        <select class="form-control" id="sort_by" name='order_by_name'>
+                            <option selected="true"
+                            disabled="disabled" value = "none">並び替え</option>
+                            <option value='1'>閲覧数順</option>
+                            <option value='2'>いいね順</option>
+                            <option value='3'>作成日順</option>
+                        </select>
+                    </div>
+                </div>
+        </div>
+</section>
+
+  <input class="form-control" id="sbox1" type="search" name="q" value="{{ request.GET.q }}" placeholder="キーワードを入力" aria-label="Search">
+
+  <button class="form-button" id="sbtn1" type="submit"><i class="fas fa-search"></i></button> 
+
+</form>
+
+<div class="container">
+  <div class="row">
+    <main class="col-md-8">
+      {% comment %} <h1 class="mb-4">「{% if query %}{{ query }}{% endif %}」の検索結果</h1>
+      <p class="text-right">{{ page_obj.start_index }}-{{ page_obj.end_index }}件（{{ paginator.count }}件）</p>
+      {% for post in post_list %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-text text-muted h6">{{ post.created_at}} </p>
+                    <p class="card-text">{{post.content|slice:":200" }}</p>
+                    <a href="{% url 'user:post_detail'  post.id %}" class="btn btn-primary">読む/コメントする &rarr;</a>
+                    <span class="" id="like_count">いいね数：{{post.like_count}}</span>
+                </div>
+            </div>
+
+      {% endfor %} {% endcomment %}
+　　　 {% if query %}
+        <h1 class="mb-4">
+        「{{ query }}」の検索結果
+        </h1>
+        <p class="text-right">{{ page_obj.start_index }}-{{ page_obj.end_index }}件（{{ paginator.count }}件）</p>
+        {% for post in post_list %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <p class="card-text text-muted h6">{{ post.created_at}} </p>
+                        <p class="card-text">{{post.content|slice:":200" }}</p>
+                        <a href="{% url 'user:post_detail'  post.id %}" class="btn btn-primary">読む/コメントする &rarr;</a>
+                        <span class="" id="like_count">いいね数：{{post.like_count}}</span>
+                    </div>
+                </div>
+　　　　　　　　　 {% include "pagination.html" %}
+        {% endfor %}
+      {% else %}
+        <h1>「　」の検索結果</h1>
+        <p>検索欄が空欄です。<br>キーワードを入力してください。</p>
+      {% endif%}
+
+
+
+
+
+
+
+    </main>
+  </div>
+ 
+<style>
+h1 {
+  margin-left:90px;
+  font-size: 40px;
+  
+
+}
+
+#sort_by {
+  
+  margin-left:230px;
+  
+  {% comment %} background:#999999; {% endcomment %}
+  background:#BBBBBB	;
+  color:#fff;
+}
+
+
+#form1{
+
+position:relative;
+max-width:600px;	
+margin-bottom:50px;
+margin-top: 80px
+
+}
+ 
+
+
+#sbox1{
+margin-left:400px;
+height:50px;
+padding:0 10px; 
+position:absolute; 
+left:0;
+top:0; 
+border-radius:25px;
+outline:0;
+{% comment %} background:#eee; {% endcomment %}
+background:white;
+}
+ 
+
+#sbtn1{
+margin-left:400px;
+height:50px;
+width:50px;	
+position:absolute; 
+left:550px; 
+top:0;
+background:#7fbfff;
+color:#fff;
+border:none;
+border-radius:0 25px 25px 0;
+}
+
+#sbtn1 .fa-search{
+font-size:20px;
+position:absolute;
+top:30%;
+left:30%;
+}
+#sbtn4:hover{
+color:#888;
+}
+</style>
+
+<script>
+
+    $(document).on('click', '#like-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '{% url "user:likes" %}',
+        data: {
+            postid: $('#like-button').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success: function (json) {
+            document.getElementById("like_count").innerHTML = json['result']
+        },
+        error: function (xhr, errmsg, err) {
+
+        }
+        });
+    })
+
+
+</script>
+{% endblock content %}

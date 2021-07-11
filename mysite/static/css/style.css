@@ -1,6 +1,8 @@
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
-  background-color: #f7c600;
-}
+  /*background-color: #f7c600;*/
+  background-color: rgb(84, 226, 219);  
+  margin-top: 30px;
+}  
 
 .navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
   color: white;
@@ -16,6 +18,65 @@ ul.navbar-nav a:hover { color: rgba(250, 230, 119, 0.781) !important; }
   margin-right: 360px;
 }
 
-.bg-light {
-  background-color: white;
+
+.navbar-brand {
+  margin-left: 200px;
+}
+
+
+
+.bg-mytheme {
+  background-color: rgb(141, 200, 211) !important;
+}
+
+
+.btn-primary,
+.btn-primary:active,
+.btn-primary:visited {
+  background-color: rgb(84, 226, 219)!important;
+  border-color: rgb(84, 226, 219);
+}
+
+.b{
+  color: rgb(246, 247, 181); /* ホームの今すぐ始めるボタンの候補色*/
+}
+
+.c {
+  color: rgb(250, 252, 156);
+}
+
+.background-blue {
+  background: rgb(219, 219, 219);
+}
+
+{% comment %} selector = document.getElementsByName(response.post_id);
+                    if(response.is_liked){
+                        $(selector).html("<far class='fas fa-lg fa-heart'></far>");
+                    }
+                    else {
+                        $(selector).html("<i class='far fa-lg fa-heart'></i>");
+                    } {% endcomment %}
+
+.r {
+  color: rgb(248, 120, 220);
+}
+
+footer {
+  background: #c6e7f8;
+  text-align: center;
+  padding: 26px 0;
+}
+
+footer p {
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+#b1def5  これは気に入りのフッターの色
+#bbe1f5
+
+
+rarara {
+  background: #7dd4ff;
+  color: #a1d0ff;  
 }

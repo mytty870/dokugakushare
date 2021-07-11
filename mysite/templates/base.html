@@ -6,36 +6,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
+  <script src="https://kit.fontawesome.com/85a6956808.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <title>Hello, world!</title>
   <link href="{% static 'css/style.css' %}" rel="stylesheet">
   <link rel="icon" type="image/png" href="{% static 'icon/apple-icon-180x180.png' %}">
+
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-light p-1">
-    <a class="navbar-brand" href="{% url 'home' %}"><img style="max-width:250px; margin-top: 5px;" src="/static/mypicture/sitelogo_10.jpg"></a>
+    {% if user.is_authenticated %}
+    <a class="navbar-brand" href="{% url 'user:mypage' %}"><img style="max-width:250px; margin-top: 5px;" src="/static/mypicture/sitelogo.png"></a>
+    {% else %}
+    <a class="navbar-brand" href="{% url 'home' %}"><img style="max-width:250px; margin-top: 5px;" src="/static/mypicture/sitelogo.png"></a>
+    {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <nav class="navbar navbar-dark default-color mt-4 pt-4">
-    <form class="form-inline my-2 my-lg-0 ml-auto" action="{% url 'user:search_post' %}" method="GET">
-      <input class="form-control" type="search" name="q" value="{{ request.GET.q }}" placeholder="検索" aria-label="Search">
-      <button class="btn btn-outline-white btn-md my-2 my-sm-0 ml-3" type="submit">検索</button>
+
+    <form class="form-inline my-2 my-lg-0 ml-auto" action="{% url 'user:search_detail' %}" method="GET">
+
+      <input class="form-control" type="search" name="q" value="{{ request.GET.q }}" placeholder="キーワードを入力" aria-label="Search">
+
+      {% comment %} <button class="btn btn-outline-white btn-md my-2 my-sm-0 ml-3" id="sbtn"　type="submit">検索</button>  {% endcomment %}
+      <input id="sbtn" type="submit" value="検索" />
+
     </form>
     </nav>
-    <ul class="navbar-nav nav-pills ml-auto">　
+    <ul class="navbar-nav nav-pills ml-auto">
+      {% if user.is_authenticated %}　
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'user:mypage' %}">マイページ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-right active" href="{% url 'user:search_view' %}">投稿検索</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-right active" href="{% url 'user:user_profile_update' user.id %}">プロフィール変更</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link nav-right active" href="{% url 'user_logout' %}">ログアウト</a>
+      </li>
+      {% else %}
       <li class="nav-item">
         <a class="nav-link active" href="{% url 'user_login' %}">ログイン</a>
       </li>
       <li class="nav-item nav-two">
         <a class="nav-link nav-right active" href="{% url 'regist' %}">新規会員登録</a>
       </li>
+      {% endif %}
     </ul>
   </nav>
-  {% block content %}{% endblock %}
+{% block content %}{% endblock content %}
+<footer>
+      <div class="wrapper">
+          <p><small>&copy; 2021 Dokugaku Share </small></p>
+      </div>
+</footer>
+<style>
 
+#sbtn {
+width:55px;/*検索ボタンの横幅*/ 
+height:35px;/*検索ボタンの縦幅*/ 
+position:absolute;/*検索ボタンの絶対位置*/  
+left:220px;/*検索ボタンの位置調整*/  
+top:26px;
+border-radius: 3px 3px;/*検索ボタンの角を丸める*/ 
+background:#7fbfff;/*検索ボタンの背景カラー*/ 
+border:none;/*検索ボタンの枠線を消す*/ 
+color:#fff;/*検索ボタンのテキストカラー*/ 
+font-weight:bold;/*検索ボタンのテキスト太字*/ 
+font-size:16px;/*検索ボタンのフォントサイズ*/ 
+}
+
+#sbtn:hover{
+color:rgba(250, 230, 119, 0.781);
+}
+
+
+footer {
+  background: #c6e7f8;
+  text-align: center;
+  padding: 100px 0;
+  
+}
+
+footer p {
+  color: #fff;
+  font-size: 1.25rem;
+}
+</style>
+{% block footer %}
+{% endblock footer %}
+
+{% comment %} <script>
+    $(document).on('click', '#like', function(event){
+          event.preventDefault();
+          var slug = $(this).attr('value');
+          $.ajax({
+            type: 'POST',
+            url: '{% url "user:likes" %}',
+            data: {
+            'post_id': pk,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+
+            success: function(response){
+              $('#like-section').html(response['form'])
+            },
+
+            error: function(rs, e){
+              console.log(rs.responseText);
+            },
+          });
+     });
+})
+</script> {% endcomment %}
+{% block javascript %}
+{% endblock javascript %}
 </body>
 </html>

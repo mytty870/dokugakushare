@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
     'postsite',
+    'user',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -99,9 +102,7 @@ PASSWORD_HASHERS = [
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        'OPTIONS': {
-            'min_length': 8,
-        }
+
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -140,7 +141,23 @@ STATICFILES_DIRS = (
     ]
 )
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dokugakushare1043@gmail.com'
+EMAIL_HOST_PASSWORD = 'Share4649'
+EMAIL_USE_TLS = True
+
+LOGIN_URL = 'user_login'
+LOGIN_REDIRECT_URL = 'user:mypage'
+LOGOUT_REDIRECT_URL = 'home'
+

@@ -1,0 +1,114 @@
+
+
+
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 card mb-4  mt-3 left  top">
+      <div class="card-header">
+        {{ object.title }}
+      </div>
+      <div class="card-body">
+        <p class=" text-muted">{{ post.created_at }} | {{ object.category.name }} | {{ object.tags}}</p>
+        <p class="card-text ">{{ object.content | safe }}</p>
+        {% if post.post_user.id == request.user.id %}
+
+        {% csrf_token %}
+
+
+        <a href="{% url 'user:post_update' post.id %}" class="btn btn-primary btn-sm">編集</a>
+        <a href="{% url 'user:delete' post.id %}" class="btn btn-primary btn-sm">削除</a>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+
+           {% csrf_token %}
+
+           <div class="pr-2">
+           <span>いいね数: </span>
+           <button class="btn btn-link text-dark p-0 border-0 btn-outline-light" id="like-button" value="{{post.id}}">
+              <i class="far fa-2x	fa-heart"></i>
+           </button>
+           <span class="" id="like_count">{{post.like_count}}</span>
+           </div>
+
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</div>
+<article class="comment-area">
+    <a class="btn btn-primary my-3" href="{% url 'user:comment' post.pk %}">コメントを投稿する</a>
+</article>
+
+<div class="container">
+
+  <div class="eleven wide column">
+    <div class="ui segment">
+        {% if comment_list %}
+            <h4>コメント一覧</h4>
+            {% for comment in comment_list %}
+            <div class="col-md-8 card mb-4 mt-3 pt-3 left top inner">
+            <div class="comment">
+              <p>{{comment.no}}. <img src="{{ comment.comment_user.icon.url }}" class="user-icon3">{{comment.comment_user.username}}<br>{{ comment.created_at }}</p>
+              <p><pre&gt:>{{comment.comment}}</pre></p>
+            </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-md-8 card mb-4 mt-3 pt-3 left top">
+            <div class="alert alert-warning">まだコメントがありません</div>
+            </div>
+        {% endif %}
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
+<style>
+.fa-heart {
+    color: rgb(248, 120, 220);
+}
+
+.user-icon3 {
+    height: 30px;
+    width: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1.5px solid #eee;
+}
+
+.inner {
+  background: #EEEEEE;
+  {% comment %} color: #555555; {% endcomment %}
+  color: #444444;
+  
+}
+</style>
+
+<script>
+    $(document).on('click', '#like-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '{% url "user:likes" %}',
+        data: {
+            postid: $('#like-button').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success: function (json) {
+            document.getElementById("like_count").innerHTML = json['result']
+        },
+        error: function (xhr, errmsg, err) {
+
+        }
+        });
+    })
+</script>
+
+{% endblock content %}

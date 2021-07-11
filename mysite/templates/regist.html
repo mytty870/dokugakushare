@@ -1,8 +1,48 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block content %}
-<form method="POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit" value="保存">
-</form>
+<div class="container-fluid" style="margin-top: 60px; margin-bottom:100px;">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="card">
+        <div class="card-header">新規会員登録</div>
+          <div class="card-body">
+            <div class="card-block">
+              <form class="my-form" action="" method="POST">
+              {% csrf_token %}
+                <div class="row">
+                  
+                  <div class="form-group col-md-11">
+                    <label for="id_last_name">ニックネーム</label>
+                    {{ form.username }}
+                    {{ form.username.errors }}
+                  </div>
+                  <div class="form-group col-md-11 my-0">
+                    <label for="id_email">メールアドレス</label>
+                    {{ form.email }}
+                    {{ form.email.errors }}
+                    <p class="help-block">{{ form.email.help_text }}</p>
+                  </div>
+                  <div class="form-group col-md-11">
+                    <label for="id_password1">パスワード</label>
+                    {{ form.password1 }}
+                    {{ form.password1.errors }}
+                  </div>
+                  <div class="form-group col-md-11">
+                    <label for="id_password2">パスワード(確認用)</label>
+                    {{ form.password2 }}
+                    {{ form.password2.errors }}
+                    <p class="help-block">{{ form.password2.help_text }}</p>
+                  </div>
+                  <div class="form-group col-md-11">
+                    <input type='hidden' name='next' value='{{ next }}' />
+                    <button type="submit" class="btn btn-block btn-outline-primary">登録する</button>
+                  </div>
+                </div>
+              </form>
+            </div><!-- end card-block -->
+          </div><!-- end card-body -->
+      </div><!-- end card -->
+    </div><!-- end col-md-6 offset-md-3 -->
+  </div><!-- end row -->
+</div><!-- end container-fluid -->
 {% endblock %}

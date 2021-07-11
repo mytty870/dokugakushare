@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if messages %}
+	<ul class="messages_ul" style="list-style: none;">
+		{% for message in messages %}
+			<li class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ user.username }}{{ message }}</li>
+		{% endfor %}
+	</ul>
+{% endif %}
+<div class = "back">
+    <div class="background-blue">
+        <div id="user_status" >
+        {% if user.icon %}
+            <img src="{{ user.icon.url }}" class="user-icon">
+        {% else %}
+            <img src="{% static 'mypicture/default.png' %}" class="user-icon">
+        {% endif %}
+        </div>
+        <h1>{{ user.username }}のMyPage</h1>
+        <p><a href="{% url 'user:create' %}" class="btn btn-primary btn-sm">投稿する</a><a href="{% url 'user:user_profile_update' user.id %}" class="btn btn-primary btn-sm">プロフィール変更</a></p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-8 mt-3 left">
+                <h2>投稿一覧</h2>
+                {% for post in post_list %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                    　　 <p class="card-text text-muted h6"><img src="{{ user.icon.url }}" class="user-icon2"> {{user.username}} | {{ post.created_at}} </p>
+                        <h2 class="card-title">{{ post.title }}</h2>
+
+                        <p class="card-text">{{post.content|slice:":200" }}</p>
+                        <p class="card-text text-muted h6">{{ post.category}} | {{ post.tags}} </p>
+                        <a href="{% url 'user:post_detail' post.id %}" class="btn btn-primary pull-left">読む/コメントする &rarr;</a>
+
+                        {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
+
+                        {% comment %} <div id="like-section">
+                        {{ total_likes }} Like {{ total_likes|pluralize }}
+
+                        <form action="{% url 'user:likes' %}" method="POST">
+                            {% csrf_token %}
+                            {% if is_liked %}
+                                <button type="submit" id="like" name="post_id" value="{{ post.id }}"><i class="fas fa-heart"></i></button>
+                            {% else %}
+                                <button type="submit" id="like" name="post_id" value="{{ post.id }}"><i class="far fa-heart"></i></button>
+                            {% endif %}
+                        </form>
+                        </div> {% endcomment %}
+                        {% comment %} <div id="like-section">
+                        {% include 'like_section.html' %}
+                        </div>
+                        {% endif %} {% endcomment %}
+
+                            {% csrf_token %}
+
+
+                            <span class="" id="like_count">いいね数：{{post.like_count}}</span>
+
+
+
+
+                    </div>
+                </div>
+                {% endfor %}
+                {% include "pagination.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+ul {
+  
+  padding-right: 40px;
+}
+
+.user-icon {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1.5px solid #eee;
+}
+{% comment %} .background-blue {
+  background: rgb(204, 214, 214);
+} {% endcomment %}
+
+.user-icon2 {
+    height: 40px;
+    width: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1.5px solid #eee;
+}
+ .back {
+    {% comment %} background: rgb(219, 219, 219); {% endcomment %}
+    background: #f0f3f5;
+}
+
+.fa-heart {
+    color: rgb(248, 120, 220);
+}
+
+
+</style>
+{% comment %} <script type="text/javascript">
+    $(document).ready(function(event){
+        $(document).on('click', '#like-button', function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'user:like' %}",
+                data: {
+                    postid: $('#like-button').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success: function(json){
+                    document.getElementsByName("like_count").innerHTML
+                    console.log(json)
+                },
+                error: function(xhr, errmsg, err){
+                }
+            });
+        });
+    });
+
+</script> {% endcomment %}
+
+ {% comment %} <script type="text/javascript">
+    $(document).ready(function(event){
+        $(document).on('click', '#like-button', function(event){
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'user:likes' %}",
+                data: {
+                    postid: $('#like-button').val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success: function(json){
+                    document.getElementsByName("like_count").innerHTML
+                    console.log(json)
+                },
+                error: function(xhr, errmsg, err){
+                }
+            });
+        });
+    });
+
+</script> {% endcomment %}
+
+<script>
+     $(document).on('click', '#like-button', function (e) {
+        e.preventDefault();
+        $.ajax({
+        type: 'POST',
+        url: '{% url "user:likes" %}',
+        data: {
+            postid: $('#like-button').val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+            action: 'post'
+        },
+        success: function (json) {
+            document.getElementById("like_count").innerHTML = json['result']
+        },
+        error: function (xhr, errmsg, err) {
+
+        }
+        });
+    })
+</script>
+{% comment %} $(document).ready(function(){
+  $(document).on('click', '#like', function(event){
+    event.preventDefault();
+    var pk = $(this).attr('value');
+    $.ajax({
+      type: 'POST',
+      url: '{% url "user:likes" %}',
+      data: {
+            'post_id': pk,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+
+            success: function(response){
+              $('#like-section').html(response['form'])
+            },
+
+            error: function(rs, e){
+              console.log(rs.responseText);
+            },
+          });
+     });
+})
+{% endcomment %}
+{% endblock content %}
+{% block footer %}
+{% endblock footer %}
+{% comment %} {% block javascript %}
+<script>
+$(document).ready(function(){
+  $(document).on('click', '#like', function(event){
+    event.preventDefault();
+    var pk = $(this).attr('value');
+    $.ajax({
+      type: 'POST',
+      url: '{% url "user:likes" %}',
+      data: {
+            'post_id': pk,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+
+            success: function(response){
+              $('#like-section').html(response['form'])
+            },
+
+            error: function(rs, e){
+              console.log(rs.responseText);
+            },
+          });
+     });
+})
+</script>
+{% endblock javascript %} {% endcomment %}

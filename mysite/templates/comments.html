@@ -1,0 +1,17 @@
+{% comment %} <div class="ui segment">
+{% if comment_list%}
+{% for comment in comment_list %}
+<div class="ui segment secondary">
+{% if user.is_authenticated %}
+{% if comment.post_id == post.id %}
+<div class="comment">
+  <p>{{ comment.comment|linebreaksbr }}<br>{{ comment.created_at }}</p>
+</div>
+{% endif %}
+{% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="ui warning message"><p>まだコメントはありません</p></div>
+{% endif %}
+</div> {% endcomment %}

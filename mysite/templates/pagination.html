@@ -1,0 +1,191 @@
+{% comment %} {% if is_paginated %}
+<nav>
+  {% if page_obj.has_previous %}
+  <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">前へ</a>
+  {% endif %}
+
+  {% for num in paginator.page_range %}
+  {% if page_obj.number == num %}
+  <span>{{ num }}</span>
+  {% else %}
+  <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+  <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">次へ</a>
+  {% endif %}
+</nav>
+{% endif %} {% endcomment %}
+
+{% comment %} {% if is_paginated %}
+<div class="pagination_rounded">
+  <ul>
+      {% if page_obj.has_previous %}
+      <li><a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="prev"><i class="fa fa-angle-left" aria-hidden="true"></i>前へ</a></li>
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+      {% if page_obj.number == num %}
+      <li class="hidden-xs"><span>{{ num }}</span></li>
+      {% else %}
+      <li class="hidden-xs"><a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a></li>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li><a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">次へ<i class="fa fa-angle-right" aria-hidden="true"></i></a></li>
+      {% endif %}
+  </ul>
+</div>
+{% endif %} {% endcomment %}
+
+{% comment %} {% if is_paginated %}本物
+
+<nav aria-label="Page navigation">
+  <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" >
+      <span aria-hidden="true">&laquo;</span>
+      <span class="sr-only">Previous</span>
+      </a>
+      </li>
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+      {% if page_obj.number == num %}
+      <li class="page-item active">
+      <a class="page-link">
+        {{ num }}
+        <span class="sr-only">(current)</span>
+      </a>
+      </li>
+      {% else %}
+      <li class="page-item">
+      <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" >
+      <span aria-hidden="true">&raquo;</span>
+      <span class="sr-only">Next</span>
+      </a>
+      </li>
+      {% endif %}
+  </ul>
+</nav>
+{% endif %} {% endcomment %}
+
+{% if is_paginated %}
+
+<nav class="page-nav " aria-label="Page navigation " >
+  <ul class="pagination ">
+
+      {% if page_obj.has_previous %}
+
+      <li class="page-item ">
+      <a class="page-link " href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" >
+      <span aria-hidden="true">&laquo;</span>
+      <span class="sr-only">Previous</span>
+      </a>
+      </li>
+      {% endif %}
+
+      {% for num in paginator.page_range %}
+      {% if page_obj.number == num %}
+      <li class="page-item active">
+      <a class="page-link ">
+        {{ num }}
+        <span class="sr-only">(current)</span>
+      </a>
+      </li>
+      {% else %}
+      <li class="page-item">
+      <a class="page-link" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">{{ num }}</a>
+      </li>
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" >
+      <span aria-hidden="true">&raquo;</span>
+      <span class="sr-only">Next</span>
+      </a>
+      </li>
+      {% endif %}
+  </ul>
+</nav>
+{% endif %}
+
+
+<style>
+.page-nav {
+  margin-left:200px;
+}
+
+.pagination>li>a, .pagination>li>span { border-radius: 50% !important;margin: 0 5px;}
+
+{% comment %} .page-link {
+    
+    color: rgb(84, 226, 219) !important;
+    background-color: #fff !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+
+.page-link:hover {
+        z-index: 2;
+        color: #fff !important;
+        text-decoration: none;
+        background-color: #a4a4a4 !important;
+        border-color: #dee2e6;
+
+ .page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: rgb(84, 226, 219) !important;
+    border-color: rgb(84, 226, 219);
+} 
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: rgb(84, 226, 219) !Important;
+    border: solid 1px rgb(84, 226, 219) !Important; {% endcomment %}
+}
+
+
+.pagination > li > a
+{
+    background-color: white;
+    color: #7fbfff;
+}
+
+.pagination > li > a:focus,
+.pagination > li > a:hover,
+.pagination > li > span:focus,
+.pagination > li > span:hover
+{
+    color: #5a5a5a;
+    background-color: #eee;
+    border-color: #ddd;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: #7fbfff !Important;
+    border: solid 1px #7fbfff !Important;
+}
+
+.pagination > .active > a:hover
+{
+    background-color: #a1d0ff !Important;
+    border: solid 1px #a1d0ff;
+}
+</style>  
