@@ -1,8 +1,8 @@
 {% extends "base.html" %}
-
+{% block title %}投稿検索ページ | {{ block.super }}{% endblock %}
 {% block content %}
 
-<p><img class="sitelogo" style="max-width:280x; height: 80px; margin-top: 170px;"src="/static/mypicture/sitelogo.png" alt="サイトロゴ" title="サイトロゴ"></p>
+<p class="site-logo"><img class="sitelogo" style="max-width:280x; height: 80px; margin-top: 170px;"src="/static/mypicture/sitelogo.png" alt="サイトロゴ" title="サイトロゴ"></p>
 
 <form class="form-box" id="form1" action="{% url 'user:search_detail' %}" method="GET">
 
@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <div class="col-sm-3 col-3">
                     <div class="form-group">
-                        <select class="form-control" id="sort_by" name='order_by_name'>
+                        <select class="form-control" id="sort_by1" name='order_by_name'>
                             <option selected="true"
                             disabled="disabled" value = "none">並び替え</option>
                             <option value='1'>閲覧数順</option>
@@ -28,70 +28,4 @@
 
 </form>
 
-
-
-<style>
-p {
-  text-align:center;
-  
-} 
-
-
-#sort_by {
-  margin-top:10px;
-  margin-left:390px;
-  {% comment %} background:#999999; {% endcomment %}
-  background:#BBBBBB	;
-  color:#fff;
-}
-
-
-#form1{
-
-position:relative;
-max-width:750px;	
-margin-bottom:350px;
-margin-top: 40px
-
-}
- 
-
-
-#sbox1{
-margin-left:600px;
-height:50px;
-padding:0 10px; 
-position:absolute; 
-left:0;
-top:0; 
-border-radius:25px;
-outline:0;
-{% comment %} background:#eee; {% endcomment %}
-background:white;
-}
- 
-
-#sbtn1{
-margin-left:600px;
-height:50px;
-width:50px;	
-position:absolute; 
-left:700px; 
-top:0;
-background:#7fbfff;
-color:#fff;
-border:none;
-border-radius:0 25px 25px 0;
-}
-
-#sbtn1 .fa-search{
-font-size:20px;
-position:absolute;
-top:30%;
-left:30%;
-}
-#sbtn4:hover{
-color:#888;
-}
-</style> 
 {% endblock %}

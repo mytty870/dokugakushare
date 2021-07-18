@@ -1,37 +1,20 @@
 {% extends 'base.html' %}
+{% block title %}ホーム | {{ block.super }}{% endblock %}
+{% load static %}
 {% block content %}
-{% if messages %}
-	<ul class="messages_ul" style="list-style: none;">
-		{% for message in messages %}
-			<li class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ message }}</li>
-		{% endfor %}
-	</ul>
-{% endif %}
 <div class="container-fluid bg-mytheme">
     <div class="row align-items-center">
-      <div class="col-md">
+      <div class="col-md picture-padding">
         <img class="img-fluid" src="/static/mypicture/mainvisual_1.png" alt="">
       </div>
       <div class="col-md text-center">
-        <p class="display-4">独学つらいですよね</p>
-        <p class="lead">つらいのはあなただけではありません。そのつらさみんなで共有しよう！</p>
-        <a href="{% url 'regist' %}" class="btn btn-light">今すぐ始める</a>
+        <p class="display-4 home-hedder">独学つらいですよね。</p>
+        <p class="lead home-text">つらいのはあなただけではありません。そのつらさみんなで共有しよう！</p>
+        <a href="{% url 'regist' %}" class="btn btn-light start-btn">今すぐ始める</a>
 
       </div>
     </div>
 </div>
-{% include "most_viewd.html" %}
-<style>
-ul {
-  margin-top:20px;
-  padding-right: 40px;
-}
-.col-md {
-  position: relative;
-  width: 100%;
-  min-height: 1px;
-  padding-right: 0px;
-  padding-left: 0px;
-}
-</style>
+{% include "most_viewed.html" %}
+
 {% endblock %}

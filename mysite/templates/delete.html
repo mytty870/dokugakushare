@@ -1,7 +1,10 @@
-{% extends 'base.html' %} {% block content %}
-<div class="container">
+{% extends 'base.html' %} 
+{% block title %}削除ページ | {{ block.super }}{% endblock %}
+{% block content %}
+<div class="container delete-container">
   <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top">
+    <div class="col-md-8 mb-4 mt-3">
+    <div class="card">
       <div class="card-header">
         {{ object.title }}
       </div>
@@ -11,13 +14,12 @@
             <div class="alert alert-warning" role="alert">
                 この投稿を本当に削除してもよろしいでしょうか?
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">削除</button>
+            <button type="submit" class="btn btn-danger btn-sm">削除</button>
         </form>
       </div>
     </div>
+    </div>
   </div>
 </div>
-
-
 
 {% endblock content %}

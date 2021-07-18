@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
-
+{% block title %}プロフィール変更 | {{ block.super }}{% endblock %}
 {% block content %}
-<div class="container">
-    <h1 class="my-5">編集</h1>
+<div class="container profile-container">
+    <h2 class="all-title my-5">プロフィール変更</h2>
     <form method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">変更する</button>
+      <button type="submit" class="btn btn-success profile-edit-btn">更新する</button>
     </form>
 </div>
-
 {% endblock content %}

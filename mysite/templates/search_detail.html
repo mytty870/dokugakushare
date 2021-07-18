@@ -1,13 +1,14 @@
 {% extends "base.html" %}
-
+{% block title %}検索詳細 | {{ block.super }}{% endblock %}
+{% load static %}
 {% block content %}
-<form class="form-box" id="form1" action="{% url 'user:search_detail' %}" method="GET">
+<form class="form-box" id="form2" action="{% url 'user:search_detail' %}" method="GET">
 
 <section class="site_filter">
         <div class="container-fluid">
             <div class="col-sm-3 col-3">
                     <div class="form-group">
-                        <select class="form-control" id="sort_by" name='order_by_name'>
+                        <select class="form-control" id="sort_by2" name='order_by_name'>
                             <option selected="true"
                             disabled="disabled" value = "none">並び替え</option>
                             <option value='1'>閲覧数順</option>
@@ -19,49 +20,43 @@
         </div>
 </section>
 
-  <input class="form-control" id="sbox1" type="search" name="q" value="{{ request.GET.q }}" placeholder="キーワードを入力" aria-label="Search">
+  <input class="form-control" id="sbox2" type="search" name="q" value="{{ request.GET.q }}" placeholder="キーワードを入力" aria-label="Search">
 
-  <button class="form-button" id="sbtn1" type="submit"><i class="fas fa-search"></i></button> 
+  <button class="form-button" id="sbtn2" type="submit"><i class="fas fa-search"></i></button> 
 
 </form>
 
 <div class="container">
   <div class="row">
-    <main class="col-md-8">
-      {% comment %} <h1 class="mb-4">「{% if query %}{{ query }}{% endif %}」の検索結果</h1>
-      <p class="text-right">{{ page_obj.start_index }}-{{ page_obj.end_index }}件（{{ paginator.count }}件）</p>
-      {% for post in post_list %}
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h2 class="card-title">{{ post.title }}</h2>
-                    <p class="card-text text-muted h6">{{ post.created_at}} </p>
-                    <p class="card-text">{{post.content|slice:":200" }}</p>
-                    <a href="{% url 'user:post_detail'  post.id %}" class="btn btn-primary">読む/コメントする &rarr;</a>
-                    <span class="" id="like_count">いいね数：{{post.like_count}}</span>
-                </div>
-            </div>
-
-      {% endfor %} {% endcomment %}
+    <main class="col-md-9 mt-5">
 　　　 {% if query %}
-        <h1 class="mb-4">
+        <h1 class="all-title query-title mb-4">
         「{{ query }}」の検索結果
         </h1>
-        <p class="text-right">{{ page_obj.start_index }}-{{ page_obj.end_index }}件（{{ paginator.count }}件）</p>
-        {% for post in post_list %}
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h2 class="card-title">{{ post.title }}</h2>
-                        <p class="card-text text-muted h6">{{ post.created_at}} </p>
-                        <p class="card-text">{{post.content|slice:":200" }}</p>
-                        <a href="{% url 'user:post_detail'  post.id %}" class="btn btn-primary">読む/コメントする &rarr;</a>
-                        <span class="" id="like_count">いいね数：{{post.like_count}}</span>
+          <p class="all-title  text-right">{{ page_obj.start_index }}-{{ page_obj.end_index }}件（{{ paginator.count }}件）</p>
+          {% if post_list%}
+            {% for post in post_list %}
+                    <div class="card mb-5">
+                        <h4 class="card-header title-font">{{ post.title }}</h4>
+                        <div class="card-body">
+                        　　 <p class="text-muted">{% if post.post_user.icon %}<img src="{{ post.post_user.icon.url }}" class="user-icon2">{% else %}<img src="{% static 'mypicture/default.png' %}" class="user-icon2">{% endif %} <a href="{% url 'user:individualpage' post.post_user.id%}" class="text-muted">{{post.post_user.username}}</a>&nbsp;|&nbsp; {{ post.created_at}} </p>
+                            <p class="card-text content-font">{{post.content|slice:":200" }}</p>
+                            <p class="card-text text-muted category-font">{{ post.category}} | {{ post.tags}} </p>
+                            <a href="{% url 'user:post_detail' post.id %}" class="btn btn-primary pull-left">読む/コメントする &rarr;</a>
+                                {% csrf_token %}
+                                <span class="like-count" id="like_count">(いいね数)：{{post.like_count}}</span>
+                                <span class="views-count" id="views">(閲覧数)：{{post.views}}</span>
+                        </div>
                     </div>
-                </div>
-　　　　　　　　　 {% include "pagination.html" %}
-        {% endfor %}
+
+            {% endfor %}
+            {% include "pagination.html" %}
+          {% else %}
+            <p class='search-zero'>検索結果が0件です</p>
+          {% endif %}
       {% else %}
-        <h1>「　」の検索結果</h1>
-        <p>検索欄が空欄です。<br>キーワードを入力してください。</p>
+          <h1>「　」の検索結果</h1>
+          <p class="no-query">検索欄が空欄です。<br>キーワードを入力してください。</p>
       {% endif%}
 
 
@@ -72,73 +67,7 @@
 
     </main>
   </div>
- 
-<style>
-h1 {
-  margin-left:90px;
-  font-size: 40px;
-  
-
-}
-
-#sort_by {
-  
-  margin-left:230px;
-  
-  {% comment %} background:#999999; {% endcomment %}
-  background:#BBBBBB	;
-  color:#fff;
-}
-
-
-#form1{
-
-position:relative;
-max-width:600px;	
-margin-bottom:50px;
-margin-top: 80px
-
-}
- 
-
-
-#sbox1{
-margin-left:400px;
-height:50px;
-padding:0 10px; 
-position:absolute; 
-left:0;
-top:0; 
-border-radius:25px;
-outline:0;
-{% comment %} background:#eee; {% endcomment %}
-background:white;
-}
- 
-
-#sbtn1{
-margin-left:400px;
-height:50px;
-width:50px;	
-position:absolute; 
-left:550px; 
-top:0;
-background:#7fbfff;
-color:#fff;
-border:none;
-border-radius:0 25px 25px 0;
-}
-
-#sbtn1 .fa-search{
-font-size:20px;
-position:absolute;
-top:30%;
-left:30%;
-}
-#sbtn4:hover{
-color:#888;
-}
-</style>
+</div>
 
 <script>
 

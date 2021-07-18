@@ -1,0 +1,26 @@
+{% load static %}
+
+<div class="container">
+        <div class="row popular-post-row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-10 mt-5">
+                <h2 class='all-title subject'>人気投稿10件<span class="most-viewed-views-ordering">(※閲覧数順)</span></h2>
+                {% for post in post_list %}
+                <div class="card mb-4">
+                    <h4 class="card-header title-font">{{ post.title }}</h4>
+                    <div class="card-body">
+                    　　 <p class="text-muted">{% if post.post_user.icon%}<img src="{{ post.post_user.icon.url }}" class="user-icon2">{% else %}<img src="{% static 'mypicture/default.png' %}" class="user-icon2">{% endif %} <a href="{% url 'user:individualpage' post.post_user.id%}" class="text-muted">{{post.post_user.username}}</a>&nbsp;|&nbsp; {{ post.created_at}} </p>
+                        <p class="card-text content-font">{{post.content|slice:":200" }}</p>
+                        <p class="card-text text-muted category-font">{{ post.category}} | {{ post.tags}} </p>
+                        <a href="{% url 'user:post_detail' post.id %}" class="btn btn-primary pull-left">読む/コメントする &rarr;</a>
+                            {% csrf_token %}
+                            <span class="like-count" id="like_count">(いいね数)：{{post.like_count}}</span>
+                            <span class="views-count" id="views">(閲覧数)：{{post.views}}</span>
+                    </div>
+                </div>
+                {% endfor %}
+                {% include "pagination.html" %}
+            </div>
+        </div>
+</div>
+

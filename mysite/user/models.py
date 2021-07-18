@@ -4,7 +4,7 @@ from django.urls import reverse
 from postsite.models import User
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField('カテゴリー', max_length=255)
     slug = models.SlugField(unique=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -15,10 +15,10 @@ class Category(models.Model):
 class Post(models.Model):
     post_user  = models.ForeignKey(User, on_delete=models.PROTECT, related_name='post_user', null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
-    tags = models.CharField(max_length=255, blank=True)
-    title = models.CharField(max_length=255)
-    book_title = models.CharField(max_length=255)
-    content = models.TextField()
+    tags = models.CharField('カテゴリーの中の細かい分野', max_length=255, blank=True)
+    title = models.CharField('タイトル', max_length=255)
+    book_title = models.CharField('使用している本の名前', max_length=255)
+    content = models.TextField('本文')
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -55,3 +55,14 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+class CommentReply(models.Model): #コメント返信用のmodel
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='replies')
+    reply_user = models.ForeignKey(User, on_delete=models.PROTECT)
+    no = models.IntegerField(default=0)
+    comment_reply = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.comment_reply[:15]
+

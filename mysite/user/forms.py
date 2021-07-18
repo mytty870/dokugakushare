@@ -1,11 +1,15 @@
 from django import forms
-from .models import Post, User, Comment
+from .models import Post, User, Comment, CommentReply
 
 class PostForm(forms.ModelForm):
  
     class Meta:
         model = Post
-        fields = ['title', 'book_title', 'category', "tags", "content", "is_public"]
+        fields = ['title', 'book_title', 'category', "tags", "content"]
+
+        labels = {
+            'category':"カテゴリー"
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,7 +33,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'icon']
+        fields = ['username', 'icon', 'background_image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,18 +44,18 @@ class ProfileForm(forms.ModelForm):
         self.fields['icon'].widget.attrs['class'] = 'form-control'
         self.fields['icon'].widget.attrs['placeholder'] = 'アイコン'
 
+        self.fields['background_image'].widget.attrs['class'] = 'form-control'
+        self.fields['background_image'].widget.attrs['placeholder'] = 'ヘッダー画像'
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
 
-    def save_with_post(self, post_id, commit=True):
-        comment = self.save(commit=False)
-        comment.post = Post.objects.get(id=post_id)
-        comment.no = Comment.objects.filter(post_id=post_id).count() + 1
-        if commit:
-            comment.save()
-        return comment
+class CommentReplyForm(forms.ModelForm):
+    class Meta:
+        model = CommentReply
+        fields = ['comment_reply']
 
     

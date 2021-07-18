@@ -1,94 +1,97 @@
 
-
-
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block title %}投稿編集 | {{ block.super }}{% endblock %}
+{% load static %}
+{% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 left  top">
-      <div class="card-header">
-        {{ object.title }}
-      </div>
-      <div class="card-body">
-        <p class=" text-muted">{{ post.created_at }} | {{ object.category.name }} | {{ object.tags}}</p>
-        <p class="card-text ">{{ object.content | safe }}</p>
-        {% if post.post_user.id == request.user.id %}
+    <div class="col-md-12 mb-4 mt-5">
+      <div class="card">
+        <h4 class="card-header title-font">{{ object.title }}</h4>
+        <div class="card-body">
+          <p class="text-muted ">{{ post.created_at }} | {{ object.category.name }} | {{ object.tags}}</p>
+          <p class="card-text content-font">{{ object.content | safe }}</p>
+          {% if post.post_user.id == request.user.id %}
 
-        {% csrf_token %}
+          {% csrf_token %}
 
 
-        <a href="{% url 'user:post_update' post.id %}" class="btn btn-primary btn-sm">編集</a>
-        <a href="{% url 'user:delete' post.id %}" class="btn btn-primary btn-sm">削除</a>
-        {% endif %}
-        {% if request.user.is_authenticated %}
+          <a href="{% url 'user:post_update' post.id %}" class="btn btn-success btn-sm">編集</a>
+          <a href="{% url 'user:delete' post.id %}" class="btn btn-danger btn-sm">削除</a>
+          {% endif %}
+          {% comment %} {% if request.user.is_authenticated %} {% endcomment %}
 
-           {% csrf_token %}
+            {% csrf_token %}
 
-           <div class="pr-2">
-           <span>いいね数: </span>
-           <button class="btn btn-link text-dark p-0 border-0 btn-outline-light" id="like-button" value="{{post.id}}">
-              <i class="far fa-2x	fa-heart"></i>
-           </button>
-           <span class="" id="like_count">{{post.like_count}}</span>
-           </div>
-
-        {% endif %}
-
+            <div class="pr-2">
+            <span>(いいね数): </span>
+            {% if user.is_authenticated %}
+            <button class="btn btn-link text-dark p-0 border-0 btn-outline-light" id="like-button" value="{{post.id}}">
+                <i class="far fa-2x	fa-heart"></i>
+            <span class="" id="like_count">{{post.like_count}}</span>
+            </button>
+            {% else%}
+            <span class="" id="like_count">{{post.like_count}}</span>
+            {% endif %}
+            </div>
+          {% comment %} {% endif %} {% endcomment %}
+        </div>
       </div>
     </div>
   </div>
 </div>
-<article class="comment-area">
-    <a class="btn btn-primary my-3" href="{% url 'user:comment' post.pk %}">コメントを投稿する</a>
-</article>
+{% comment %} <div class="comment-button">
+    <a class="btn btn-primary my-3 btn-sm" href="{% url 'user:comment' post.pk %}">コメントを投稿する</a>
+</div> {% endcomment %}
 
 <div class="container">
 
   <div class="eleven wide column">
-    <div class="ui segment">
+    <div class="ui segment comment-border">
         {% if comment_list %}
-            <h4>コメント一覧</h4>
+            <div class="comment-button"><h4>コメント一覧</h4></div>
+            <div class="comment-button">
+            <a class="btn btn-primary my-3 btn-sm" href="{% url 'user:comment' post.pk %}">コメントを投稿する</a>
+            </div>
             {% for comment in comment_list %}
-            <div class="col-md-8 card mb-4 mt-3 pt-3 left top inner">
+            <div class="col-md-8 card mb-4 mt-1 pt-3 left top inner">
             <div class="comment">
-              <p>{{comment.no}}. <img src="{{ comment.comment_user.icon.url }}" class="user-icon3">{{comment.comment_user.username}}<br>{{ comment.created_at }}</p>
-              <p><pre&gt:>{{comment.comment}}</pre></p>
+              <p>{{comment.no}}. {% if comment.comment_user.icon %}<img src="{{ comment.comment_user.icon.url }}" class="user-icon2">{% else %}<img src="{% static 'mypicture/default.png' %}" class="user-icon2">{% endif %}<a href="{% url 'user:individualpage' comment.comment_user.id%}" class="text-dark">{{comment.comment_user.username}}</a><br>{{ comment.created_at }}</p>
+              <p class="comment-list-font"><pre&gt:>{{comment.comment}}</pre></p>
+              <a class="btn btn-primary my-3 btn-sm" href="{% url 'user:comment_reply' comment.pk %}">返信する</a>
+                {% comment %} {% if commentreply_list %}
+                  {% for commentreply in commentreply_list %}
+                    <p>{{commentreply.no}}.</p>
+                    <p><pre&gt:>{{commentreply.comment_reply}}</pre></p>
+                  {% endfor %}
+                {% else %}
+                  <h1> a </h1>
+                {% endif %} {% endcomment %}
+                {% for reply in comment.replies.all %}
+                  <div class="reply ml-4">
+                  <p class='reply-list'>返信{{reply.no}}.{% if reply.reply_user.icon %}<img src="{{ reply.reply_user.icon.url }}" class="user-icon3">{% else %}<img src="{% static 'mypicture/default.png' %}" class="user-icon3">{% endif %} <a href="{% url 'user:individualpage' reply.reply_user.id%}" class="text-dark">{{reply.reply_user.username}}</a> | {{ reply.created_at }}</p>
+                  <div class="reply ml-4"><p class='reply-list-font'><pre&gt:>{{reply.comment_reply}}</pre></p></div>
+                  </div>
+                {% endfor %}
+
             </div>
             </div>
             {% endfor %}
         {% else %}
-            <div class="col-md-8 card mb-4 mt-3 pt-3 left top">
+            <div class="comment-button" id="no-commented-btn">
+                <a class="btn btn-primary my-3 btn-sm" href="{% url 'user:comment' post.pk %}">コメントを投稿する</a>
+            </div>
+            <div class="col-md-8 card pt-3" id="no-commented">
             <div class="alert alert-warning">まだコメントがありません</div>
             </div>
+
+            </style>
         {% endif %}
 
     </div>
   </div>
 
 </div>
-
-
-
-
-<style>
-.fa-heart {
-    color: rgb(248, 120, 220);
-}
-
-.user-icon3 {
-    height: 30px;
-    width: 30px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 1.5px solid #eee;
-}
-
-.inner {
-  background: #EEEEEE;
-  {% comment %} color: #555555; {% endcomment %}
-  color: #444444;
-  
-}
-</style>
 
 <script>
     $(document).on('click', '#like-button', function (e) {
@@ -109,6 +112,10 @@
         }
         });
     })
-</script>
-
+</script> 
+{% block javascript %}
+{% endblock javascript %}
 {% endblock content %}
+
+
+

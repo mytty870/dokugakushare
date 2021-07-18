@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}マイページ | {{ block.super }}{% endblock %}
+{% block title %}ユーザ詳細ページ | {{ block.super }}{% endblock %}
 {% load static %}
 {% block content %}
-{% if messages %}
-	<ul class="messages_ul" style="list-style: none;">
-		{% for message in messages %}
-            <li class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}" role="alert">{{ user.username }}{{ message }}</li>
-		{% endfor %}
-	</ul>
-{% endif %}
+<div class = "back">
+    {% comment %} <div class="background-blue">
+        <div class='profile-margin'>
+        <div id="user_status" >
+        
+            {% if user.icon %}
+                <h1><img src="{{ user.icon.url }}" class="user-icon"><span class="profile-username">{{ user.username }}</span></h1>
+            {% else %}
+                <h1><img src="{% static 'mypicture/default.png' %}" class="user-icon"><span class="profile-username">{{ user.username }}</span></h1>
+            {% endif %}
+        
+        </div>
 
-<div class="back">
+        </div>
+    </div> {% endcomment %}
+
     {% if user.background_image %}
     <div class="user-background-image" style="background-image: url({{ user.background_image.url}});">
     {% else %}
@@ -20,13 +27,13 @@
         <div class='profile-margin'>
         <div id="user_status" >
         {% if user.icon %}
-            <h1 class="user-user-name"><img src="{{ user.icon.url }}" class="user-icon"><span class="profile-username">{{ user.username }}</span></h1>
+            <h1 class="user-user-name"><img src="{{ user.icon.url }}" class="user-icon"><span class="profile-username ">{{ user.username }}</span></h1>
         {% else %}
             <h1 class="user-user-name"><img src="{% static 'mypicture/default.png' %}" class="user-icon"><span class="profile-username">{{ user.username }}</span></h1>
         {% endif %}
         </div>
-        {% comment %} <h1>{{ user.username }}のMyPage</h1> {% endcomment %}
-        <p><a href="{% url 'user:create' %}" class="btn btn-primary btn-sm mypage-post-btn">投稿する</a><a href="{% url 'user:user_profile_update' user.id %}" class="btn btn-primary btn-sm profile-edit">プロフィール変更</a></p>
+
+    
         </div>
     
     </div>
@@ -34,9 +41,9 @@
     <div class="container">
         <div class="row mypage-row">
             <!-- Blog Entries Column -->
-            <div class="col-md-9 mt-5">
-                <h2 class="all-title subject">投稿一覧</h2>
-                {% if post_list%}
+            <div class="col-md-9 mt-3">
+                {% if post_list %}
+                    <h2 class="all-title subject">投稿一覧</h2>
                     {% for post in post_list %}
                     <div class="card mb-4">
                         <h4 class="card-header title-font">{{ post.title }}</h4>
@@ -45,15 +52,22 @@
                             <p class="card-text content-font">{{post.content|slice:":200" }}</p>
                             <p class="card-text text-muted category-font">{{ post.category}} | {{ post.tags}} </p>
                             <a href="{% url 'user:post_detail' post.id %}" class="btn btn-primary pull-left">読む/コメントする &rarr;</a>
+
                                 {% csrf_token %}
+
+
                                 <span class="like-count" id="like_count">(いいね数)：{{post.like_count}}</span>
                                 <span class="views-count" id="views">(閲覧数)：{{post.views}}</span>
+
+
+
+
                         </div>
                     </div>
                     {% endfor %}
                 {% else %}
                     <div class="col-md-10 card pt-3" id="no-post">
-                        <div class="alert alert-warning">{{user.username}}さん、まだ投稿がありません。<br>投稿してみましょう！</div>
+                        <div class="alert alert-warning">{{user.username}}さんは、まだ投稿がありません。</div>
                     </div>
                 {% endif %}
                 {% include "pagination.html" %}
@@ -61,9 +75,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 {% endblock content %}
 {% block footer %}

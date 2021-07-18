@@ -35,24 +35,25 @@ class CustomUserManager(UserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-  email = models.EmailField(_('email address'), unique=True)
-  username = models.CharField(_('username'), max_length=30,)
-  icon = models.ImageField(blank=True, null=True)
+  email = models.EmailField('Eメールアドレス', unique=True)
+  username = models.CharField('ユーザー名', max_length=30,)
+  icon = models.ImageField('アイコン', blank=True, null=True)
+  background_image = models.ImageField('ヘッダー画像', blank=True, null=True)
   is_staff = models.BooleanField(
-        _('staff status'),
+        'staff status',
         default=False,
         help_text=_(
             'Designates whether the user can log into this admin site.'),
   )
   is_active = models.BooleanField(
-        _('active'),
+        'active',
         default=True,
         help_text=_(
             'Designates whether this user should be treated as active. '
             'Unselect this instead of deleting accounts.'
         ),
   )
-  date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+  date_joined = models.DateTimeField('date joined', default=timezone.now)
 
   objects = CustomUserManager()
 
@@ -63,8 +64,4 @@ class User(AbstractBaseUser, PermissionsMixin):
   class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
-
-  def email_user(self, subject, message, from_email=None, **kwargs):
-        """Send an email to this user."""
-        send_mail(subject, message, from_email, [self.email], **kwargs)
 

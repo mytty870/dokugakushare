@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}投稿ページ | {{ block.super }}{% endblock %}
+  {% block content %}
+  <div class="container post-post-form">
+    <h1 class="all-title my-5">新規投稿</h1>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-primary post-post-btn">投稿する</button>
+    </form>
+  </div>
+  {% endblock content %}
+
